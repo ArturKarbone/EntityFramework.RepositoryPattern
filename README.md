@@ -3,8 +3,8 @@ EntityFramework.RepositoryPattern
 
 Lets observe two repositories with typical CRUD methods:
 
-<pre>
-public class NotificationsRepository : PPKC.DAL.BaseRepositories.INotificationsRepository 
+```c#
+public class NotificationsRepository : INotificationsRepository 
     {
         public virtual List<Notification> GetAll()
         {
@@ -63,11 +63,11 @@ public class NotificationsRepository : PPKC.DAL.BaseRepositories.INotificationsR
             }
         }
     }
-</pre>
+```
 
 and
 
-<pre>
+```c#
  public class ClientsRepository : IClientsRepository
     { 
         public virtual List<Client> GetAll()
@@ -127,14 +127,15 @@ and
             }
         }
     }
-</pre>
+```
 
 The only different thing between the two is their DbSet: Clients/Notifications respectivelly. Since we can extract a DbSet via lambda lets move the code above to BaseRepository:
 
-<pre>
+```c#
 public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class, IDBIdentity
     {
-        Func<SomeContext, DbSet<TEntity>> ExtractDbSetFromContext { get; set; }
+        
+        Func <SomeContext, DbSet<TEntity>> ExtractDbSetFromContext { get; set; }
 
         public BaseRepository(Func<SomeContext, DbSet<TEntity>> extractDbSetFromContext)
         {
@@ -217,12 +218,12 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
             }
         }
     }
-</pre>
+```
 
 
 
 now NotificationsRepository looks like this
-<pre>
+```c#
   public class NotificationsRepository : BaseRepository<Notification>, INotificationsRepository
     {
         public NotificationsRepository()
@@ -237,10 +238,10 @@ now NotificationsRepository looks like this
     public interface INotificationsRepository : IBaseRepository<Notification>
     {
     }
-</pre>
+```
 
 here is an interface for DB Entity
-<pre>
+```c#
  public interface  IDBIdentity
     {
         Guid Id { get; set; }
@@ -248,6 +249,6 @@ here is an interface for DB Entity
         DateTime? UpdatedAt { get; set;  }
     }
     
-</pre>
+```
 
 
