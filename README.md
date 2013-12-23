@@ -4,16 +4,16 @@ EntityFramework.RepositoryPattern
 
 public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class, IDBIdentity
     {
-        Func<BaseContext, DbSet<TEntity>> ExtractDbSetFromContext { get; set; }
+        Func<SomeContext, DbSet<TEntity>> ExtractDbSetFromContext { get; set; }
 
-        public BaseRepository(Func<PPKCEntities, DbSet<TEntity>> extractDbSetFromContext)
+        public BaseRepository(Func<SomeContext, DbSet<TEntity>> extractDbSetFromContext)
         {
             this.ExtractDbSetFromContext = extractDbSetFromContext;
         }
 
         public virtual List<TEntity> GetAll()
         {
-            using (var db = new BaseContext())
+            using (var db = new SomeContext())
             {
                 var dbSet = ExtractDbSetFromContext(db);
                 return dbSet.ToList();
@@ -22,7 +22,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
 
         public virtual TEntity Get(Guid id)
         {
-            using (var db = new BaseContext())
+            using (var db = new SomeContext())
             {
                 var dbSet = ExtractDbSetFromContext(db);
                 return dbSet.FirstOrDefault(x => x.Id == id);
@@ -31,7 +31,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
 
         public virtual TEntity InserOrUpdate(TEntity entity)
         {
-            using (var db = new BaseContext())
+            using (var db = new SomeContext())
             {
                 var dbSet = ExtractDbSetFromContext(db);
 
@@ -63,7 +63,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
 
         public virtual void Delete(Guid id)
         {
-            using (var db = new BaseContext())
+            using (var db = new SomeContext())
             {
                 var dbSet = ExtractDbSetFromContext(db);
                 var entity = dbSet.FirstOrDefault(x => x.Id == id);
@@ -77,7 +77,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
 
         public virtual void Copy(Guid id)
         {
-            using (var db = new BaseContext())
+            using (var db = new SomeContext())
             {
                 var dbSet = ExtractDbSetFromContext(db);
                 var entityToCopy = dbSet.AsNoTracking().FirstOrDefault(x => x.Id == id);
