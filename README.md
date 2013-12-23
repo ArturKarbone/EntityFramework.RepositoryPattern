@@ -239,6 +239,15 @@ now NotificationsRepository looks like this
     }
 </pre>
 
-here is a common interface for 
+here is an interface for DB Entity
+<pre>
+ public interface  IDBIdentity
+    {
+        Guid Id { get; set; }
+        DateTime CreatedAt { get; set; }
+        DateTime? UpdatedAt { get; set;  }
+    }
+    
+</pre>
 
 
